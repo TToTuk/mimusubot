@@ -28,7 +28,7 @@ r = sr.Recognizer()
 async def cmd_inline_url(message: types.Message):
     buttons = [
         types.InlineKeyboardButton(text="Список команд", callback_data="help"),
-        types.InlineKeyboardButton(text="GitHub", url="https://github.com")
+        types.InlineKeyboardButton(text="GitHub", url="https://github.com/TToTuk/mimusubot")
     ]
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     keyboard.add(*buttons)
