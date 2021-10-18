@@ -1,7 +1,4 @@
 import asyncio
-from aiogram.types.base import String
-from aiogram.types.inline_keyboard import InlineKeyboardButton, InlineKeyboardMarkup
-
 import soundfile as sf
 import config
 import logging
