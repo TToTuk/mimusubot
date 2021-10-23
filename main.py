@@ -1,14 +1,11 @@
 import asyncio
-import soundfile as sf
 import config
 import logging
 import random
-import speech_recognition as sr
 import wikipedia
 import subprocess
 
 from translate import Translator
-from pathlib import Path
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ContentType, File, Message, message
 
@@ -17,7 +14,6 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot)
 const = 100
-r = sr.Recognizer()
 
 #hello
 
@@ -35,6 +31,12 @@ async def cmd_inline_url(message: types.Message):
 async def process_callback_button1(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
     await bot.send_message(callback_query.from_user.id, config.help_text)
+   
+#help
+
+@dp.message_handler(commands='help')
+async def help(message):
+    await message.reply(config.help_text)
 
 #translate
 
@@ -86,38 +88,6 @@ async def wiki(message: types.Message):
     wikipedia.set_lang('ru')
     await message.reply(wikipedia.summary(search))
 
-#vtt (dont work)
-'''
-async def handle_file(file: File, file_name: str, path: str):
-    Path(f"{path}").mkdir(parents=True, exist_ok=True)
-
-    await bot.download_file(file_path=file.file_path, destination=f"{path}/{file_name}")
-@dp.message_handler(content_types=[ContentType.VOICE])
-async def voice_message_handler(message: Message):
-    voice = await message.voice.get_file()
-    path = "/voices"
-
-    await handle_file(file=voice, file_name=f"input.ogg", path=path)
-
-    #data, samplerate = sf.read('/voices/voi.ogg')
-    #sf.write('voices/voir.wav', data, samplerate)
-
-    await asyncio.sleep(5)
-
-    input_ogg = open('input.ogg')
-
-    #data, samplerate = sf.read(input_ogg)
-    #sf.write('output.wav', data, samplerate)
-
-    await asyncio.sleep(5)
-
-    sample_audio = sr.AudioFile('C:/voices/output.wav')
-    with sample_audio as audio_file:
-        sr.adjust_for_ambient_noise(audio_file)
-        audio_content = sr.record(audio_file)
-
-        await message.reply(sr.recognize_google(audio_content))
-'''
 #polling
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
