@@ -37,6 +37,16 @@ async def process_callback_button1(callback_query: types.CallbackQuery):
 @dp.message_handler(commands='help')
 async def help(message):
     await message.reply(config.help_text)
+    
+#me
+@dp.message_handler(commands=['me'])
+async def me(message: types.Message):
+    mesme = message.text[4:]
+    await message.bot.delete_message(chat_id=message.chat.id ,message_id=message.message_id)
+    if mesme.strip():
+       await message.answer(message.from_user.first_name + ' ' + message.from_user.last_name + " " + mesme)
+    else:
+        return
 
 #translate
 
