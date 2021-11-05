@@ -97,6 +97,14 @@ async def wiki(message: types.Message):
     print(search)
     wikipedia.set_lang('ru')
     await message.reply(wikipedia.summary(search))
+    
+#weather
+
+@dp.message_handler(commands='weather')
+async def help(message):
+    observ = mgr.weather_at_place('Anzhero-Sudzhensk, RU')
+    w = observ.weather
+    await message.answer('В данное время:\nтемпература равна ' + str(w.temperature('celsius')['temp']) + ' С,\n скорость ветра ' + str(w.wind()['speed']) + ' м/с')
 
 #polling
 if __name__ == "__main__":
