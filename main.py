@@ -8,6 +8,7 @@ import subprocess
 from translate import Translator
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ContentType, File, Message, message
+from aiobalaboba import balaboba
 
 logging.basicConfig(level=logging.INFO)
 
@@ -102,9 +103,24 @@ async def wiki(message: types.Message):
 
 @dp.message_handler(commands='weather')
 async def help(message):
-    observ = mgr.weather_at_place('Anzhero-Sudzhensk, RU')
-    w = observ.weather
-    await message.answer('В данное время:\nтемпература равна ' + str(w.temperature('celsius')['temp']) + ' С,\n скорость ветра ' + str(w.wind()['speed']) + ' м/с')
+    wes = message.text[9:]
+    if wes.strip():
+        weconst = str(wes)
+        observ = mgr.weather_at_place(weconst)
+        w = observ.weather
+    else:
+       weconst = 'Анжеро-Судженск'
+       observ = mgr.weather_at_place(weconst)
+       w = observ.weather
+    await message.answer('В данное время в городе '+ weconst +':\nтемпература равна ' + str(w.temperature('celsius')['temp']) + ' С,\n скорость ветра ' + str(w.wind()['speed']) + ' м/с')
+
+#balaboba
+@dp.message_handler(commands=['b'])
+async def me(message: types.Message):
+    mesb = message.text[3:]
+    response = await balaboba(mesb)
+    print(response)
+    await message.reply(response)
 
 #polling
 if __name__ == "__main__":
